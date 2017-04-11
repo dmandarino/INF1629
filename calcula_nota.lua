@@ -1,8 +1,8 @@
 -- TITLE: Calcula_Nota
 -- AUTHOR: Douglas Mandarino <douglas.mandarino@gmail.com>
 -- DATE: 10/04/2017
--- VERSION: 1.0
--- CONTENT: ~49 lines    
+-- VERSION: 1.1
+-- CONTENT: ~191 lines    
 
 
 -- Função auxiliar para lidar com todos os cálculos necessários
