@@ -5,68 +5,67 @@
 -- CONTENT: ~49 lines    
 
 
--- Função auxiliar para calcular todas as notas de um arquivo
--- PRE: content é uma tabela com todas as linhas do arquivo lido
--- POS: deve calcular todas as notas que estavam no arquivo e colocar em um novo arquivo
-function calcula_notas()
-  local linesInFileLenght = handler.countLines(content)
+-- Função auxiliar para lidar com todos os cálculos necessários
+-- POS: deve calcular todas as notas que estiverem no content e inserir em uma tabela de result
+function calcula_handler()
+  calc_handler = {}
 
-  i = 1
-  while i <= linesInFileLenght do 
-    local media = calcula_nota(lines[i])
-    insere_resultado(media, lines[i])
-    i = i + 1
+  -- Função auxiliar para calcular todas as notas de um arquivo
+  -- PRE: content é uma tabela com todas as linhas do arquivo lido
+  -- POS: deve calcular todas as notas que estavam no arquivo e colocar em um novo arquivo
+  calc_handler.calcula_notas = function()
+    local linesInFileLenght = handler.countLines(content)
+
+    i = 1
+    while i <= linesInFileLenght do 
+      local media = calc_handler.calcula_nota(lines[i])
+      calc_handler.insere_resultado(media, lines[i])
+      i = i + 1
+    end
   end
-end
 
--- Função auxiliar para inserir resultado com base na media do aluno
--- PRE: media é a média do aluno, enquanto line é a linha que está sendo lida
--- POS: deve pegar a matricula do aluno, media e calcula a situacao do aluno. Entao insere no results o resultado
--- Verificação: O arquivo deve estar nesse formato
-function insere_resultado(media, line)
-  local data = {}
-  local situacao = {}
-  
-  data.id, _, _ = line:match("([^;]+)-([^;]+)-([^;]+)")
+  -- Função auxiliar para inserir resultado com base na media do aluno
+  -- PRE: media é a média do aluno, enquanto line é a linha que está sendo lida
+  -- POS: deve pegar a matricula do aluno, media e calcula a situacao do aluno. Entao insere no results o resultado
+  -- Verificação: O arquivo deve estar nesse formato
+  calc_handler.insere_resultado = function(media, line)
+    local data = {}
+    local situacao = {}
+    
+    data.id, _, _ = line:match("([^;]+)-([^;]+)-([^;]+)")
 
-  if media >= 5 then
-    situacao = "AP"
-  else 
-    situacao = "RM"
+    if media >= 5 then
+      situacao = "AP"
+    else 
+      situacao = "RM"
+    end
+    
+    result = data.id .. "-" .. media .. "-" .. situacao
+    table.insert(results, result)
   end
-  
-  result = data.id .. "-" .. media .. "-" .. situacao
-  table.insert(results, result)
+
+
+  -- Função auxiliar para inserir
+  -- PRE: line é a linha que está sendo avaliada
+  -- POS: deve retornar a media do aluno
+  -- Verificação: O arquivo deve estar nesse formato
+  calc_handler.calcula_nota = function(line)
+    local data = {}
+    _, data.p1, data.p2 = line:match("([^;]+)-([^;]+)-([^;]+)")
+    local media = (data.p1 + data.p2) / 2
+    return media
+  end
+
+  return calc_handler
 end
 
-
--- Função auxiliar para inserir
--- PRE: line é a linha que está sendo avaliada
--- POS: deve retornar a media do aluno
--- Verificação: O arquivo deve estar nesse formato
-function calcula_nota(line)
-  local data = {}
-  _, data.p1, data.p2 = line:match("([^;]+)-([^;]+)-([^;]+)")
-  local media = (data.p1 + data.p2) / 2
-  return media
-end
-
--- Função auxiliar para exibir o resultado do aluno
--- POS: deve pegar a matricula do aluno, media e calcula a situ
--- Verificação: O arquivo deve existir e estar preenchido nesse formato
--- function exibe_resultado()
---   local data = {}
---   for i, l in ipairs(results) do 
---     data.id, data.media, data.situacao = l:match("([^;]+)-([^;]+)-([^;]+)")
---     print(data.id .. " : " .. data.situacao)
---   end
--- end
-
+-- Função auxiliar responsável em exibir os resultados e gerar o relatório
+-- POS: deve conter todos os métodos necessários para a criação do relatório e a exibição do resultado
 function result_handler()
   res_handler = {}
   -- Função auxiliar para exibir o resultado do aluno
--- POS: deve pegar a matricula do aluno, media e calcula a situ
--- Verificação: O arquivo deve existir e estar preenchido nesse formato
+  -- POS: deve pegar a matricula do aluno, media e calcula a situ
+  -- Verificação: O arquivo deve existir e estar preenchido nesse formato
   res_handler.exibe_resultado = function()
     local data = {}
     for i, l in ipairs(results) do 
@@ -154,12 +153,12 @@ function main()
 
   fileHandler = file_handler()
   resultHandler = result_handler()
+  calculaHandler = calcula_handler()
   
   fileHandler.get_file_content()
-  calcula_notas()
+  calculaHandler.calcula_notas()
   resultHandler.cria_relatorio()
   resultHandler.exibe_resultado()
-
 end
 
 main()
