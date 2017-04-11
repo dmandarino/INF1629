@@ -20,3 +20,5 @@ a situação do aluno. Se a média for maior ou igual a 5, o aluno está aprovad
 11/04 - Criação das funções e suas respectivas documentações
 
 11/04 - Testes
+
+11/04 - Correções da Documentação
