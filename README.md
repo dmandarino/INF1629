@@ -1,8 +1,7 @@
 # INF1629 - G1
-INF1629 - Trab 1
+Calcula Notas
 
-O programa lê um arquivo (.txt) com a matrícula e as notas dos alunos e calcula a média. Em seguida, ele gera um relatório e exibe para o usuário
-a situação do aluno. Se a média for maior ou igual a 5, o aluno está aprovado, do contrário, está reprovado. 
+O programa lê um arquivo (.txt) da escolha do usuário, que contém a matrícula e as notas dos alunos. O programa calcula a média de cada aluno. Em seguida, ele gera um relatório e exibe para o usuário situação do aluno. Se a média for maior ou igual a 5, o aluno está aprovado, do contrário, está reprovado. 
 
 ## Diagrama
 
