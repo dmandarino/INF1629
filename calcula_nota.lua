@@ -8,7 +8,7 @@
 -- Função auxiliar para calcular todas as notas de um arquivo
 -- PRE: content é uma tabela com todas as linhas do arquivo lido
 -- POS: deve calcular todas as notas que estavam no arquivo e colocar em um novo arquivo
-function calcula_notas(content)
+function calcula_notas()
   local linesInFileLenght = handler.countLines(content)
 
   i = 1
@@ -54,12 +54,32 @@ end
 -- Função auxiliar para exibir o resultado do aluno
 -- POS: deve pegar a matricula do aluno, media e calcula a situ
 -- Verificação: O arquivo deve existir e estar preenchido nesse formato
-function exibe_resultado()
-  local data = {}
-  for i, l in ipairs(results) do 
-    data.id, data.media, data.situacao = l:match("([^;]+)-([^;]+)-([^;]+)")
-    print(data.id .. " : " .. data.situacao)
+-- function exibe_resultado()
+--   local data = {}
+--   for i, l in ipairs(results) do 
+--     data.id, data.media, data.situacao = l:match("([^;]+)-([^;]+)-([^;]+)")
+--     print(data.id .. " : " .. data.situacao)
+--   end
+-- end
+
+function result_handler()
+  res_handler = {}
+  -- Função auxiliar para exibir o resultado do aluno
+-- POS: deve pegar a matricula do aluno, media e calcula a situ
+-- Verificação: O arquivo deve existir e estar preenchido nesse formato
+  res_handler.exibe_resultado = function()
+    local data = {}
+    for i, l in ipairs(results) do 
+      data.id, data.media, data.situacao = l:match("([^;]+)-([^;]+)-([^;]+)")
+      print(data.id .. " : " .. data.situacao)
+    end
   end
+
+  res_handler.cria_relatorio = function()
+    fileHandler.write_file()
+  end
+
+  return res_handler
 end
 
 -- -- Função para manipular arquivos
@@ -121,8 +141,7 @@ function file_handler()
   -- POS: é retornado uma tabela com o contéudo de um arquivo, caso ele exista
   handler.get_file_content = function()
     local fileName = io.read()
-    local lines = fileHandler.read_file(fileName ..".txt")  
-    return lines
+    content = fileHandler.read_file(fileName ..".txt")  
   end
   
   return handler
@@ -131,12 +150,15 @@ end
 
 function main() 
   results = {}
+  content = {}
+
   fileHandler = file_handler()
-  content = fileHandler.get_file_content()
+  resultHandler = result_handler()
   
-  calcula_notas(content)
-  fileHandler.write_file()
-  exibe_resultado()
+  fileHandler.get_file_content()
+  calcula_notas()
+  resultHandler.cria_relatorio()
+  resultHandler.exibe_resultado()
 
 end
 
