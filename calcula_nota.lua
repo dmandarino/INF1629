@@ -81,8 +81,8 @@ function result_handler()
   return res_handler
 end
 
--- -- Função para manipular arquivos
--- -- POS: é retornado conjunto de funções para manipular arquivos
+-- Função para manipular arquivos
+-- POS: é retornado conjunto de funções para manipular arquivos
 function file_handler()
   handler = {}
 
@@ -146,19 +146,46 @@ function file_handler()
   return handler
 end
 
+-- Função para obter as funções gráficas da aplicação
+-- POS: é retornado conjunto de funções para desenhar as funções gráficas da aplicação
+function draw_handler()
+  draw = {}
+
+  -- Função responsável por desenhar o header do programa
+  draw.header = function () 
+    print()
+    print()
+    print("_______________| Calcula_Nota - INF 1629 |___________________")
+    print()
+  end
+
+  -- Função responsável por o footer do prgorama
+  -- PRE: result não é nulo.
+  draw.footer = function (result)
+    print()
+    print("___________________| Obrigado |______________________")
+    print()
+    
+  end
+
+  return draw
+end
 
 function main() 
   results = {}
   content = {}
 
+  drawHandler = draw_handler()
   fileHandler = file_handler()
   resultHandler = result_handler()
   calculaHandler = calcula_handler()
   
   fileHandler.get_file_content()
   calculaHandler.calcula_notas()
+  drawHandler.header()
   resultHandler.cria_relatorio()
   resultHandler.exibe_resultado()
+  drawHandler.footer()
 end
 
 main()
