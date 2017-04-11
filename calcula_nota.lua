@@ -2,7 +2,7 @@
 -- AUTHOR: Douglas Mandarino <douglas.mandarino@gmail.com>
 -- DATE: 10/04/2017
 -- VERSION: 1.1
--- CONTENT: ~191 lines    
+-- CONTENT: ~201 lines    
 
 
 -- Função auxiliar para lidar com todos os cálculos necessários
