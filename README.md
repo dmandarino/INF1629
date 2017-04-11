@@ -6,7 +6,7 @@ a situação do aluno. Se a média for maior ou igual a 5, o aluno está aprovad
 
 ## Diagrama
 
-![Diagrama](http://diagrama/diagrama.001.jpeg)
+![Diagrama](diagrama/diagrama.001.jpeg)
 
 ## Livro diário
 08/04 - Estudo da linguagem Lua
