@@ -9,7 +9,6 @@
 -- PRE: content é uma tabela com todas as linhas do arquivo lido
 -- POS: deve calcular todas as notas que estavam no arquivo e colocar em um novo arquivo
 function calcula_notas(content)
-  results = {}
   local linesInFileLenght = handler.countLines(content)
 
   i = 1
@@ -20,14 +19,23 @@ function calcula_notas(content)
   end
 end
 
--- Função auxiliar para inserir
+-- Função auxiliar para inserir resultado com base na media do aluno
 -- PRE: media é a média do aluno, enquanto line é a linha que está sendo lida
--- POS: deve pegar a matricula do aluno e a media e inserir no results
+-- POS: deve pegar a matricula do aluno, media e calcula a situacao do aluno. Entao insere no results o resultado
 -- Verificação: O arquivo deve estar nesse formato
 function insere_resultado(media, line)
   local data = {}
+  local situacao = {}
+  
   data.id, _, _ = line:match("([^;]+)-([^;]+)-([^;]+)")
-  result = data.id .. "-" .. media
+
+  if media >= 5 then
+    situacao = "AP"
+  else 
+    situacao = "RM"
+  end
+  
+  result = data.id .. "-" .. media .. "-" .. situacao
   table.insert(results, result)
 end
 
@@ -41,6 +49,17 @@ function calcula_nota(line)
   _, data.p1, data.p2 = line:match("([^;]+)-([^;]+)-([^;]+)")
   local media = (data.p1 + data.p2) / 2
   return media
+end
+
+-- Função auxiliar para exibir o resultado do aluno
+-- POS: deve pegar a matricula do aluno, media e calcula a situ
+-- Verificação: O arquivo deve existir e estar preenchido nesse formato
+function exibe_resultado()
+  local data = {}
+  for i, l in ipairs(results) do 
+    data.id, data.media, data.situacao = l:match("([^;]+)-([^;]+)-([^;]+)")
+    print(data.id .. " : " .. data.situacao)
+  end
 end
 
 -- -- Função para manipular arquivos
@@ -91,11 +110,11 @@ function file_handler()
   -- Retirado de: https://www.lua.org/pil/21.2.html
   --
   -- Função para escrever um arquivo de resultados
-  -- POS: é retornado um arquivo de "results.txt"
+  -- POS: escreve no arquivo "results.txt" o resultado e cada aluno
   handler.write_file = function()
-    local results = "results.txt"
-    lines = io.input(results)    
-    return lines
+    file = io.open("results.txt", "w")
+    for i, l in ipairs(results) do file:write(l, "\n") end
+    print("Relatório criado com sucesso")
   end
 
   -- Função para abrir um arquivo
@@ -111,11 +130,14 @@ end
 
 
 function main() 
+  results = {}
   fileHandler = file_handler()
   content = fileHandler.get_file_content()
-
+  
   calcula_notas(content)
-  for i, l in ipairs(results) do io.write(l, "\n") end
+  fileHandler.write_file()
+  exibe_resultado()
+
 end
 
 main()
