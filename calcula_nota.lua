@@ -151,11 +151,19 @@ end
 function draw_handler()
   draw = {}
 
+  draw.question = function () 
+    print()
+    print("Digite o nome do arquivo com as notas que desejar calcular a nota:")
+    print()
+  end
+
   -- Função responsável por desenhar o header do programa
   draw.header = function () 
     print()
     print()
-    print("_______________| Calcula_Nota - INF 1629 |___________________")
+    print("-------------------------------------------------------------")
+    print("---------------| Calcula_Nota - INF 1629 |-------------------")
+    print("-------------------------------------------------------------")
     print()
   end
 
@@ -163,7 +171,8 @@ function draw_handler()
   -- PRE: result não é nulo.
   draw.footer = function (result)
     print()
-    print("___________________| Obrigado |______________________")
+    print("-------------------------------------------------------------")
+    print("------------------------| Obrigado |-------------------------")
     print()
     
   end
@@ -180,6 +189,7 @@ function main()
   resultHandler = result_handler()
   calculaHandler = calcula_handler()
   
+  drawHandler.question()
   fileHandler.get_file_content()
   calculaHandler.calcula_notas()
   drawHandler.header()
